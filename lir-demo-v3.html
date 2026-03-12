@@ -23,32 +23,35 @@
   .clock { font-size: 11px; color: #fff; font-family: 'DM Mono', 'Courier New', monospace; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); }
 
   /* Toggle — sits in header as a modern element hinting at Lir */
-  .toggle-btn { display: flex; align-items: center; gap: 8px; padding: 3px 4px 3px 10px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); cursor: pointer; transition: all 0.3s; user-select: none; }
-  .toggle-btn.active { border-color: #7dd3fc; background: rgba(14,165,233,0.2); }
-  .toggle-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.8); transition: color 0.3s; }
-  .toggle-btn.active .toggle-label { color: #fff; }
-  .toggle-track { width: 32px; height: 16px; border-radius: 8px; padding: 2px; background: rgba(255,255,255,0.25); transition: background 0.3s; }
-  .toggle-btn.active .toggle-track { background: linear-gradient(135deg, #0ea5e9, #06b6d4); }
+  .toggle-btn { display: flex; align-items: center; gap: 10px; padding: 3px 10px 3px 14px; border-radius: 14px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; transition: all 0.3s; user-select: none; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .toggle-btn.active { border-color: #93c5fd; background: #eff6ff; box-shadow: 0 1px 3px rgba(37,99,235,0.15); }
+  .toggle-label { font-size: 11px; font-weight: 600; color: #475569; font-family: 'DM Sans', sans-serif; transition: color 0.3s; }
+  .toggle-btn.active .toggle-label { color: #2563eb; }
+  .toggle-track { width: 32px; height: 16px; border-radius: 8px; padding: 2px; background: #cbd5e1; transition: background 0.3s; }
+  .toggle-btn.active .toggle-track { background: #2563eb; }
   .toggle-thumb { width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.3); transition: transform 0.3s; }
   .toggle-btn.active .toggle-thumb { transform: translateX(16px); }
 
   /* ======== MENU BAR — classic Win32 ======== */
   .menubar {
     background: #ece9d8; border-bottom: 1px solid #aca899; padding: 0 4px;
-    display: flex; align-items: center; height: 22px; gap: 0;
+    display: flex; align-items: center; height: 28px; gap: 0;
     font-size: 11px; font-family: Tahoma, 'Segoe UI', sans-serif; color: #000;
+    position: relative;
   }
+  .menubar-left { display: flex; align-items: center; }
+  .menubar-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; }
   .menu-item { padding: 2px 8px; cursor: default; }
   .menu-item:hover { background: #316ac5; color: #fff; }
   .menubar-right { margin-left: auto; font-size: 10px; color: #444; display: flex; gap: 12px; align-items: center; }
   .menubar-right span { font-family: 'DM Mono', 'Courier New', monospace; }
 
   /* ======== LAYOUT ======== */
-  .layout { display: flex; min-height: calc(100vh - 50px); }
+  .layout { display: flex; min-height: calc(100vh - 50px); align-items: flex-start; padding: 8px; gap: 8px; }
   .scada-panel { flex: 1; min-width: 0; background: #d4d0c8; padding: 6px; transition: flex 0.5s ease; }
-  .lir-panel { width: 0; opacity: 0; overflow: hidden; transition: width 0.5s ease, opacity 0.4s ease 0.1s; flex-shrink: 0; background: #fafafa; border-left: none; }
-  .lir-panel.open { width: 33.333%; opacity: 1; border-left: 1px solid #ececec; }
-  .lir-inner { min-width: 310px; padding: 20px 20px; }
+  .lir-panel { width: 0; opacity: 0; overflow: hidden; transition: width 0.5s ease, opacity 0.4s ease 0.1s; flex-shrink: 0; background: #fafafa; border-radius: 16px; border: 1px solid #dfdfdf; box-shadow: 0 0 0 3px #d4d0c8, 0 0 0 4px #ececec; }
+  .lir-panel.open { width: 33.333%; opacity: 1; }
+  .lir-inner { min-width: 310px; padding: 20px; }
 
   /* ======== SCADA STYLING — Win32 / industrial ======== */
   /* Classic inset/outset borders */
@@ -177,22 +180,26 @@
   </div>
   <div class="header-right">
     <span class="clock" id="clock"></span>
-    <button class="toggle-btn" id="tbtn" onclick="toggle()">
-      <span class="toggle-label" id="tlbl">Enable Lir</span>
-      <div class="toggle-track"><div class="toggle-thumb" id="tthumb"></div></div>
-    </button>
   </div>
 </div>
 
 <!-- Menu bar -->
 <div class="menubar">
-  <span class="menu-item">File</span>
-  <span class="menu-item">View</span>
-  <span class="menu-item">Process</span>
-  <span class="menu-item">Alarms</span>
-  <span class="menu-item">Reports</span>
-  <span class="menu-item">Tools</span>
-  <span class="menu-item">Help</span>
+  <div class="menubar-left">
+    <span class="menu-item">File</span>
+    <span class="menu-item">View</span>
+    <span class="menu-item">Process</span>
+    <span class="menu-item">Alarms</span>
+    <span class="menu-item">Reports</span>
+    <span class="menu-item">Tools</span>
+    <span class="menu-item">Help</span>
+  </div>
+  <div class="menubar-center">
+    <button class="toggle-btn" id="tbtn" onclick="toggle()">
+      <span class="toggle-label" id="tlbl">Enable Lir</span>
+      <div class="toggle-track"><div class="toggle-thumb" id="tthumb"></div></div>
+    </button>
+  </div>
   <div class="menubar-right">
     <span>PLC: CONNECTED</span>
     <span>SCADA v4.2.1</span>
