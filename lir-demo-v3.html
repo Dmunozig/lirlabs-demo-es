@@ -48,7 +48,7 @@
 
   /* ======== LAYOUT ======== */
   .layout { display: flex; min-height: calc(100vh - 50px); align-items: flex-start; padding: 8px; gap: 8px; }
-  .scada-panel { flex: 1; min-width: 0; background: #d4d0c8; padding: 6px; transition: flex 0.5s ease; }
+  .scada-panel { flex: 1; min-width: 0; background: #d4d0c8; padding: 4px 4px 0 4px; transition: flex 0.5s ease; }
   .lir-panel { width: 0; opacity: 0; overflow: hidden; transition: width 0.5s ease, opacity 0.4s ease 0.1s; flex-shrink: 0; background: #fafafa; border-radius: 16px; border: 1px solid #dfdfdf; box-shadow: 0 0 0 3px #d4d0c8, 0 0 0 4px #ececec; }
   .lir-panel.open { width: 33.333%; opacity: 1; }
   .lir-inner { min-width: 310px; padding: 20px; }
@@ -284,41 +284,138 @@ function toggle(){
 }
 
 function renderS(){
-  let h='';
+  const pY=280, acc='#e11d48', dark='#1e293b', muted='#64748b', pp='#475569';
+  const LH=(x1,x2,y,w=2,c=pp)=>`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${c}" stroke-width="${w}" stroke-linecap="square"/>`;
+  const LV=(x,y1,y2,w=2,c=pp)=>`<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="${c}" stroke-width="${w}" stroke-linecap="square"/>`;
+  const AR=(x,y,c=dark)=>`<polygon points="${x},${y-8} ${x+15},${y} ${x},${y+8}" fill="${c}"/>`;
+  const AU=(x,y,c=pp)=>`<polygon points="${x-7},${y} ${x},${y-14} ${x+7},${y}" fill="${c}"/>`;
 
-  // Digital metrics
-  h+=`<div class="scada-metrics">`;
-  [{l:'DO',v:'1.92',u:'mg/L',t:null},{l:'NH4-N',v:'2.81',u:'mg/L',t:'↓0.3'},{l:'FLOW',v:'438',u:'m³/h',t:null},{l:'ENERGY',v:'152',u:'kWh',t:'↑4%'}].forEach(m=>{
-    const tc=m.t&&(m.t[0]==='↑'||m.t[0]==='+')?'smt-up':'smt-dn';
-    h+=`<div class="scada-metric"><div class="scada-metric-label">${m.l}</div><div class="scada-metric-row"><span class="scada-metric-value">${m.v}</span><span class="scada-metric-unit">${m.u}</span>${m.t?`<span class="scada-metric-trend ${tc}">${m.t}</span>`:''}</div></div>`;
-  });
-  h+='</div>';
+  const pump=(cx,cy,lbl,sub)=>
+    `<circle cx="${cx}" cy="${cy}" r="22" fill="#e2e8f0" stroke="${dark}" stroke-width="1.5"/>
+     <polygon points="${cx-9},${cy-7} ${cx+11},${cy} ${cx-9},${cy+7}" fill="${dark}"/>
+     <text x="${cx}" y="${cy-30}" text-anchor="middle" font-size="10" font-weight="700" fill="${dark}" font-family="'DM Sans',sans-serif">${lbl}</text>
+     <text x="${cx}" y="${cy+36}" text-anchor="middle" font-size="9" font-weight="700" fill="${acc}" font-family="'DM Sans',sans-serif">${sub}</text>`;
 
-  // Process Trends group
-  h+=`<div class="scada-group"><div class="scada-group-title"><span>Process Trends — 48h</span><span style="font-size:9px;opacity:0.7">AUTO-REFRESH: 5s</span></div><div class="scada-group-body">`;
-  h+='<div class="scada-charts">';
-  h+=`<div class="scada-chart-box"><div class="scada-chart-label">Dissolved Oxygen — Zones 1-5 <span>mg/L</span></div>${schrt(doD,'#00dd00',{yLabel:'mg/L'})}</div>`;
-  h+=`<div class="scada-chart-box"><div class="scada-chart-label">Ammonium NH4-N — Effluent <span>mg/L</span></div>${schrt(nh4D,'#00ccff',{threshold:4,thresholdLabel:'CONSENT',yLabel:'mg/L'})}</div>`;
-  h+=`<div class="scada-chart-box"><div class="scada-chart-label">Aeration Energy <span>kWh</span></div>${schrt(enD,'#ffaa00',{yLabel:'kWh'})}</div>`;
-  h+=`<div class="scada-chart-box"><div class="scada-chart-label">Influent Flow <span>m³/h</span></div>${schrt(flD,'#00dd00',{yLabel:'m³/h'})}</div>`;
-  h+='</div></div></div>';
+  const valve=(cx,cy,lbl,sub)=>
+    `<polygon points="${cx-13},${cy-10} ${cx+13},${cy+10} ${cx+13},${cy-10} ${cx-13},${cy+10}" fill="#93c5fd" stroke="${dark}" stroke-width="1.5"/>
+     <circle cx="${cx}" cy="${cy}" r="4" fill="${dark}"/>
+     <text x="${cx}" y="${cy-22}" text-anchor="middle" font-size="10" font-weight="700" fill="${dark}" font-family="'DM Sans',sans-serif">${lbl}</text>
+     <text x="${cx}" y="${cy+28}" text-anchor="middle" font-size="9" font-weight="700" fill="${acc}" font-family="'DM Sans',sans-serif">${sub}</text>`;
 
-  // Blind spots (always visible — the point is they persist even with Lir on)
+  const gauge=(gx,gy,lbl,val,unit,maxV,pct,gH=120)=>{
+    const gW=22, fillH=Math.max(4,(gH-4)*pct), lvY=gy+gH-2-fillH;
+    return `<text x="${gx+gW/2}" y="${gy-12}" text-anchor="middle" font-size="10" font-weight="700" fill="${dark}" font-family="'DM Sans',sans-serif">${lbl}</text>
+     <text x="${gx+gW+4}" y="${gy+8}" font-size="9" font-weight="700" fill="${acc}" font-family="'DM Mono',monospace">${maxV}</text>
+     <line x1="${gx+gW}" y1="${gy}" x2="${gx+gW+4}" y2="${gy}" stroke="${acc}" stroke-width="1"/>
+     <line x1="${gx+gW}" y1="${gy+gH/2}" x2="${gx+gW+4}" y2="${gy+gH/2}" stroke="${muted}" stroke-width="1"/>
+     <rect x="${gx}" y="${gy}" width="${gW}" height="${gH}" fill="#dde3ec" stroke="#94a3b8" stroke-width="1.5"/>
+     <rect x="${gx+2}" y="${lvY}" width="${gW-4}" height="${fillH}" fill="#7ab8f5"/>
+     <polygon points="${gx-12},${lvY} ${gx-1},${lvY-5} ${gx-1},${lvY+5}" fill="${dark}"/>
+     <text x="${gx+gW+4}" y="${lvY+4}" font-size="9" font-weight="700" fill="${acc}" font-family="'DM Mono',monospace">${val}</text>
+     <text x="${gx+gW+4}" y="${gy+gH+2}" font-size="9" fill="${muted}" font-family="'DM Mono',monospace">0</text>
+     <text x="${gx+gW/2}" y="${gy+gH+16}" text-anchor="middle" font-size="9" fill="${muted}" font-family="'DM Sans',sans-serif">${unit}</text>`;
+  };
+
+  const tank=(tx,ty,tw,th,lvl,lbl,sub,trend=[])=>{
+    const cx=tx+tw/2, bY=ty+th;
+    const fillH=Math.max(4,th*lvl), wY=bY-fillH;
+    const outline=`M ${tx},${bY} L ${tx},${ty} L ${tx+tw},${ty} L ${tx+tw},${bY} Z`;
+    let spark='';
+    if(trend.length>1){
+      const tv=trend.map(x=>x.value), tmn=Math.min(...tv), tmx=Math.max(...tv), trn=tmx-tmn||1;
+      const pad=10, vpad=7;
+      const tX=i=>tx+pad+(i/(trend.length-1))*(tw-pad*2);
+      const tY=v=>wY+vpad+((tmx-v)/trn)*(fillH-vpad*2);
+      spark=`<polyline points="${trend.map((x,i)=>`${tX(i).toFixed(1)},${tY(x.value).toFixed(1)}`).join(' ')}" fill="none" stroke="#1e293b" stroke-width="0.9" opacity="0.65"/>`;
+    }
+    return `<path d="${outline}" fill="#c4ccd8"/>
+     <rect x="${tx}" y="${wY}" width="${tw}" height="${fillH}" fill="#93c5fd" opacity="0.65"/>
+     ${spark}
+     <path d="${outline}" fill="none" stroke="${pp}" stroke-width="1.5"/>
+     <text x="${cx}" y="${bY+14}" text-anchor="middle" font-size="11" font-weight="700" fill="${dark}" font-family="'DM Sans',sans-serif">${lbl}</text>
+     <text x="${cx}" y="${bY+28}" text-anchor="middle" font-size="11" font-weight="700" fill="${acc}" font-family="'DM Sans',sans-serif">${sub}</text>`;
+  };
+
+  const mixer=(cx,topY)=>
+    `<circle cx="${cx}" cy="${topY-22}" r="15" fill="#e2e8f0" stroke="${pp}" stroke-width="1.5"/>
+     <text x="${cx}" y="${topY-17}" text-anchor="middle" font-size="11" font-weight="700" fill="${dark}">M</text>
+     <line x1="${cx}" y1="${topY-7}" x2="${cx}" y2="${topY+70}" stroke="${pp}" stroke-width="1.5"/>
+     <line x1="${cx-22}" y1="${topY+70}" x2="${cx+22}" y2="${topY+70}" stroke="${pp}" stroke-width="2" stroke-linecap="round"/>
+     <line x1="${cx-17}" y1="${topY+82}" x2="${cx+17}" y2="${topY+82}" stroke="${pp}" stroke-width="2" stroke-linecap="round"/>`;
+
+  // Layout constants — tanks centred between their connecting pipes
+  const atX=300,atY=165,atW=165,atH=115; // centred between V-101 (x=226) and P-201 (x=536)
+  const scX=644,scY=170,scW=130,scH=110; // centred between P-201 (x=580) and V-301 (x=838)
+  const rasY=360, rasLX=264, rasRX=scX+(scW>>1);
+
+  let s=`<svg viewBox="0 0 1100 420" style="width:100%;height:auto;display:block">
+  <rect width="1100" height="420" fill="#d4d0c8"/>`;
+
+  // ── MAIN PIPE ──
+  s+=LH(22,108,pY);        // influent → P-101
+  s+=LH(152,200,pY);       // P-101 → V-101
+  s+=LH(226,atX,pY);       // V-101 → Aeration in
+  s+=LH(atX+atW,536,pY);   // Aeration out → P-201
+  s+=LH(580,scX,pY);       // P-201 → Clarifier in
+  s+=LH(scX+scW,838,pY);   // Clarifier out → V-301
+  s+=LH(865,963,pY);       // V-301 → Effluent
+  s+=AR(22,pY);
+  s+=AR(963,pY);
+
+  // ── RAS RETURN LINE ──
+  s+=LV(rasLX,pY,rasY,1.5,'#9ca3af');
+  s+=LV(rasRX,pY,rasY,1.5,'#9ca3af');
+  s+=LH(rasLX,rasRX,rasY,1.5,'#9ca3af');
+  s+=AU(rasLX,pY+2,'#9ca3af');
+  const rPx=(rasLX+rasRX)>>1;
+  s+=`<circle cx="${rPx}" cy="${rasY}" r="13" fill="#e2e8f0" stroke="#9ca3af" stroke-width="1.5"/>`;
+  s+=`<polygon points="${rPx-7},${rasY-5} ${rPx+9},${rasY} ${rPx-7},${rasY+5}" fill="#9ca3af"/>`;
+  s+=`<text x="${rPx}" y="${rasY-18}" text-anchor="middle" font-size="9" font-weight="600" fill="${muted}" font-family="'DM Sans',sans-serif">P-RAS</text>`;
+  s+=`<text x="${rPx}" y="${rasY+22}" text-anchor="middle" font-size="8" fill="${muted}" font-family="'DM Sans',sans-serif">Return Activated Sludge (RAS)</text>`;
+
+  // ── GAUGES ──
+  s+=gauge(48,35,'FIT-101','438','m³/h','600',438/600,100);
+  s+=gauge(atX+20,18,'AT-201','1.92','DO mg/L','6.0',1.92/6,85);
+  s+=gauge(atX+atW-42,18,'AT-202','2.81','NH₄ mg/L','8.0',2.81/8,85);
+
+  // ── TANKS (drawn before components so components render on top) ──
+  s+=tank(atX,atY,atW,atH,0.65,'Aeration Basin','65%',doD);
+  s+=tank(scX,scY,scW,scH,0.45,'Secondary Clarifier','45%');
+
+  // ── MIXER ──
+  s+=mixer(atX+(atW>>1),atY);
+
+  // ── PUMPS & VALVES ──
+  s+=pump(130,pY,'P-101','65% Running');
+  s+=valve(213,pY,'V-101','80% Open');
+  s+=pump(558,pY,'P-201','75% Running');
+  s+=valve(852,pY,'V-301','60% Open');
+
+  // ── LABELS ──
+  s+=`<text x="22" y="${pY-16}" font-size="11" font-weight="700" fill="${dark}" font-family="'DM Sans',sans-serif">Influent</text>`;
+  s+=`<text x="980" y="${pY-16}" font-size="11" font-weight="700" fill="${dark}" font-family="'DM Sans',sans-serif">Effluent</text>`;
+
+  // Energy badge
+  s+=`<rect x="808" y="14" width="142" height="36" fill="rgba(255,255,255,0.75)" stroke="#c8cfd8" stroke-width="1"/>`;
+  s+=`<text x="879" y="29" text-anchor="middle" font-size="9" font-weight="600" fill="${muted}" font-family="'DM Sans',sans-serif">ENERGY</text>`;
+  s+=`<text x="879" y="44" text-anchor="middle" font-size="11" font-weight="700" fill="${acc}" font-family="'DM Mono',monospace">152 kWh  ↑4%</text>`;
+
+  s+='</svg>';
+
+  let h=s;
+
   if(!on){
     h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATA GAP: Sludge Volume Index (SVI)</div>
     <div class="scada-blind-body"><strong>Last reading: 118 mL/g</strong> — sampled 5 days ago<br>Frequency: 1x weekly manual grab sample<br>Next scheduled: 2 days<br><br>⚠ No continuous monitoring. Changes between samples are undetected.</div>
     <div class="scada-blind-overlay"></div></div>`;
-
     h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATA GAP: Chemical Dosing — PAC</div>
     <div class="scada-blind-body"><strong>Fixed rate: 6.0 g/L</strong> — last adjusted 2 weeks ago<br>Mode: constant (operator-set)<br>No link to biological state. No predictive dosing capability.</div>
     <div class="scada-blind-overlay"></div></div>`;
-
     h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATA GAP: Foam / Bulking Events</div>
     <div class="scada-blind-body">Last event: 12 days ago — Duration: ~6 hours<br>Cause: suspected filamentous growth <strong>(unconfirmed)</strong><br>Response: emergency antifoam + manual SVI check<br>Cost: ~€2,400 (antifoam + operator overtime)<br><br>⚠ Events logged reactively. No early warning system.</div>
     <div class="scada-blind-overlay"></div></div>`;
   }
 
-  // Status bar
   h+=`<div class="statusbar" style="margin-top:6px"><div class="statusbar-item"><span class="status-led led-green"></span>PLC Online</div><div class="statusbar-item"><span class="status-led led-green"></span>SCADA Link</div><div class="statusbar-item"><span class="status-led led-amber"></span>Biology: NO DATA</div><div class="statusbar-item">Alarms: ${on?'0':'3'} active</div></div>`;
 
   document.getElementById('scada').innerHTML=h;
