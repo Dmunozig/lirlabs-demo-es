@@ -168,6 +168,18 @@
     .scada-charts { grid-template-columns: 1fr; }
     .lir-panel.open { width: 40%; }
   }
+
+  /* Floc images */
+  .floc-imgs { display: flex; gap: 8px; margin-top: 10px; }
+  .floc-img { flex: 1; min-width: 0; border-radius: 10px; display: block; cursor: crosshair; transition: opacity 0.15s; }
+  .floc-img:hover { opacity: 0.92; }
+
+  /* Modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 500; display: flex; align-items: center; justify-content: center; }
+  .modal-box { background: #fff; border-radius: 16px; padding: 20px; width: 580px; max-width: 93vw; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+  .modal-close { position: absolute; top: 10px; right: 12px; cursor: pointer; font-size: 16px; color: #64748b; background: none; border: none; line-height: 1; padding: 4px 6px; }
+  .modal-close:hover { color: #1e293b; }
+  .la.crit.expandable { cursor: pointer; }
 </style>
 </head>
 <body>
@@ -429,8 +441,8 @@ function renderL(){
   if(!on){document.getElementById('lir-inner').innerHTML='';return;}
   let h=`<div class="lir-hdr"><div class="lir-dot"></div><span class="lir-txt">Lir Biological Intelligence</span><span class="live">LIVE</span></div>`;
 
-  // Critical alert — red, AlertCircle icon
-  h+=`<div class="la crit"><div class="la-icon">${iconAlertCircle('#dc2626')}</div><div class="la-content"><div class="la-t">SVI Projected to Exceed 150 in 48hrs</div><div class="la-d">Filamentous bacteria density +62% / 24h. Elongated filaments consistent with M. parvicella.</div><div class="la-a">⚡ Increase PAC to 8.5 g/L · Adjust DO to 2.3 mg/L</div></div></div>`;
+  // Critical alert — red, expandable on click
+  h+=`<div class="la crit expandable" onclick="toggleSVIAlert(this)"><div class="la-icon">${iconAlertCircle('#dc2626')}</div><div class="la-content"><div class="la-t">SVI Projected to Exceed 150 in 48hrs</div><div class="la-d">Filamentous bacteria density +62% / 24h. Elongated filaments consistent with M. parvicella.</div><div class="la-a">⚡ Increase PAC to 8.5 g/L · Adjust DO to 2.3 mg/L</div><div class="floc-imgs" style="display:none"><img class="floc-img" src="microscopy_images/Floc1_annotated.png" onmouseover="this.src='microscopy_images/Floc1_unannotated.png'" onmouseout="this.src='microscopy_images/Floc1_annotated.png'"><img class="floc-img" src="microscopy_images/Floc2_annotated.png" onmouseover="this.src='microscopy_images/Floc2_unannotated.png'" onmouseout="this.src='microscopy_images/Floc2_annotated.png'"></div></div></div>`;
 
   // Warning alert — amber, AlertTriangle icon
   h+=`<div class="la warn"><div class="la-icon">${iconAlertTriangle('#d97706')}</div><div class="la-content"><div class="la-t">Foam Risk ${lfm}% — Elevated</div><div class="la-d">Surface imaging detects foam precursors. Action within 12h.</div></div></div>`;
@@ -438,11 +450,11 @@ function renderL(){
   // Success alert — green, CircleCheck icon
   h+=`<div class="la ok"><div class="la-icon">${iconCircleCheck('#16a34a')}</div><div class="la-content"><div class="la-t">NH₄-N Within Consent Limits</div><div class="la-d">Effluent ammonium at 2.81 mg/L — 1.19 mg/L below the 4 mg/L threshold.</div></div></div>`;
 
-  h+=`<div class="cc lb"><div class="cc-title">Filamentous Index <span class="badge b-alert">↑ 62% / 24h</span></div>${lchrt(fiD,'#dc2626',{threshold:40,thresholdLabel:'action threshold',yLabel:'FI'})}<div class="cc-note">Current: <span class="red">${lfi}</span> — Type 0092 / <em>M. parvicella</em></div></div>`;
+  h+=`<div class="cc lb" style="cursor:pointer" onclick="openFIModal()"><div class="cc-title">Filamentous Index <span class="badge b-alert">↑ 62% / 24h</span></div>${lchrt(fiD,'#dc2626',{threshold:40,thresholdLabel:'action threshold',yLabel:'FI'})}<div class="cc-note">Current: <span class="red">${lfi}</span> — Type 0092 / <em>M. parvicella</em></div></div>`;
 
-  h+=`<div class="cc lb"><div class="cc-title">SVI — Live + Forecast <span class="badge b-warn">150+ in 48h</span></div>${lchrt(svA,'#d97706',{threshold:150,thresholdLabel:'bulking threshold',forecastData:svF,showConfidence:true,yLabel:'mL/g'})}<div class="cc-note">Current: <strong>${lsvi}</strong> mL/g — +1.1/hr</div></div>`;
+  h+=`<div class="cc lb" style="cursor:pointer" onclick="openSVIModal()"><div class="cc-title">SVI — Live + Forecast <span class="badge b-warn">150+ in 48h</span></div>${lchrt(svA,'#d97706',{threshold:150,thresholdLabel:'bulking threshold',forecastData:svF,showConfidence:true,yLabel:'mL/g'})}<div class="cc-note">Current: <strong>${lsvi}</strong> mL/g — +1.1/hr</div></div>`;
 
-  h+=`<div class="cc lb"><div class="cc-title">Floc Size Distribution</div>${lbar(fcD,'#2563eb')}<div class="cc-note">Median: <strong>125 µm</strong> — real-time via Lir imager</div></div>`;
+  h+=`<div class="cc lb" style="cursor:pointer" onclick="openFlocModal()"><div class="cc-title">Floc Size Distribution</div>${lbar(fcD,'#2563eb')}<div class="cc-note">Median: <strong>125 µm</strong> — real-time via Lir imager</div></div>`;
 
   h+=`<div class="cc lb"><div class="cc-title">Foam Risk <span class="badge b-warn">${lfm}%</span></div>${lchrt(fmD,'#ea580c',{threshold:70,thresholdLabel:'high risk',yLabel:'%',height:80})}</div>`;
 
@@ -453,6 +465,95 @@ function renderL(){
   h+='</div>';
 
   document.getElementById('lir-inner').innerHTML=h;
+}
+
+function toggleSVIAlert(el){
+  const imgs=el.querySelector('.floc-imgs');
+  if(!imgs) return;
+  imgs.style.display=imgs.style.display==='none'?'flex':'none';
+}
+
+function flocImgPair(){
+  return `<div class="floc-imgs"><img class="floc-img" src="microscopy_images/Floc1_annotated.png" onmouseover="this.src='microscopy_images/Floc1_unannotated.png'" onmouseout="this.src='microscopy_images/Floc1_annotated.png'"><img class="floc-img" src="microscopy_images/Floc2_annotated.png" onmouseover="this.src='microscopy_images/Floc2_unannotated.png'" onmouseout="this.src='microscopy_images/Floc2_annotated.png'"></div>`;
+}
+
+function flocTrendChart(){
+  const W=500,H=200,pl=42,pr=10,pt=24,pb=24;
+  const pW=W-pl-pr,pH=H-pt-pb;
+  const sMin=0,sMax=320;
+  const sX=s=>pl+Math.max(0,Math.min(1,(s-sMin)/(sMax-sMin)))*pW;
+  const T=48;
+  const tY=t=>pt+(t/(T-1))*pH;
+  // Mode shifts 70→138µm, spread grows 18→72µm (worsening SVI trend)
+  const mode=t=>70+(t/(T-1))*68;
+  const sigma=t=>18+(t/(T-1))*54;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">`;
+  svg+=`<rect x="${pl}" y="${pt}" width="${pW}" height="${pH}" fill="#f8fafc"/>`;
+  // vertical grid
+  [50,100,150,200,250,300].forEach(sz=>{
+    const x=sX(sz);
+    svg+=`<line x1="${x}" y1="${pt}" x2="${x}" y2="${pt+pH}" stroke="#e2e8f0" stroke-width="0.5"/>`;
+  });
+  // bands outermost→innermost, each a polygon (left edge top→bottom, right edge bottom→top)
+  [[3.5,0.09],[2.8,0.13],[2.1,0.18],[1.5,0.23],[0.9,0.29],[0.35,0.38]].forEach(([z,op])=>{
+    let pts='';
+    for(let t=0;t<T;t++) pts+=`${sX(Math.max(sMin,mode(t)-sigma(t)*z)).toFixed(1)},${tY(t).toFixed(1)} `;
+    for(let t=T-1;t>=0;t--) pts+=`${sX(Math.min(sMax,mode(t)+sigma(t)*z)).toFixed(1)},${tY(t).toFixed(1)} `;
+    svg+=`<polygon points="${pts}" fill="#3b82f6" opacity="${op}"/>`;
+  });
+  // median line
+  const mpts=Array.from({length:T},(_,t)=>`${sX(mode(t)).toFixed(1)},${tY(t).toFixed(1)}`).join(' ');
+  svg+=`<polyline points="${mpts}" fill="none" stroke="#1e40af" stroke-width="1.2" opacity="0.75"/>`;
+  // x-axis size labels
+  [50,100,150,200,250,300].forEach(sz=>{
+    svg+=`<text x="${sX(sz)}" y="${H-6}" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="'DM Mono',monospace">${sz}µm</text>`;
+  });
+  // y-axis time labels
+  svg+=`<text x="${pl-4}" y="${pt+6}" text-anchor="end" font-size="7" fill="#9ca3af">−24h</text>`;
+  svg+=`<text x="${pl-4}" y="${pt+pH+4}" text-anchor="end" font-size="7" fill="#9ca3af">now</text>`;
+  // legend
+  svg+=`<text x="${pl+6}" y="${pt+11}" font-size="8" fill="#64748b" font-family="'DM Sans',sans-serif">50% distribution</text>`;
+  svg+=`<text x="${pl+6}" y="${pt+21}" font-size="8" fill="#64748b" font-family="'DM Sans',sans-serif">Median</text>`;
+  svg+='</svg>';
+  return svg;
+}
+
+function openFlocModal(){
+  if(document.getElementById('floc-modal')) return;
+  const bar=lbar(fcD,'#2563eb');
+  const trend=flocTrendChart();
+  const m=document.createElement('div');
+  m.id='floc-modal';
+  m.className='modal-overlay';
+  m.innerHTML=`<div class="modal-box"><button class="modal-close" onclick="document.getElementById('floc-modal').remove()">✕</button><div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:12px;font-family:'DM Sans',sans-serif">Floc Size Distribution</div>${bar}<div style="font-size:10px;color:#64748b;margin:6px 0 16px;font-family:'DM Sans',sans-serif">Median: <strong style="color:#1e293b">125 µm</strong> — real-time via Lir imager</div><div style="font-size:11px;font-weight:600;color:#1e293b;margin-bottom:8px;font-family:'DM Sans',sans-serif">Distribution trend — last 24h</div>${trend}</div>`;
+  m.addEventListener('click',e=>{if(e.target===m)m.remove();});
+  document.body.appendChild(m);
+}
+
+function filamentImgPair(){
+  return `<div class="floc-imgs"><img class="floc-img" src="microscopy_images/Filament1_annotated.png" onmouseover="this.src='microscopy_images/Filament1_unannotated.png'" onmouseout="this.src='microscopy_images/Filament1_annotated.png'"><img class="floc-img" src="microscopy_images/Filament2_annotated.png" onmouseover="this.src='microscopy_images/Filament2_unannotated.png'" onmouseout="this.src='microscopy_images/Filament2_annotated.png'"></div>`;
+}
+
+function openFIModal(){
+  if(document.getElementById('fi-modal')) return;
+  const chart=lchrt(fiD,'#dc2626',{threshold:40,thresholdLabel:'action threshold',yLabel:'FI',height:160});
+  const m=document.createElement('div');
+  m.id='fi-modal';
+  m.className='modal-overlay';
+  m.innerHTML=`<div class="modal-box"><button class="modal-close" onclick="document.getElementById('fi-modal').remove()">✕</button><div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:12px;font-family:'DM Sans',sans-serif">Filamentous Index <span class="badge b-alert">↑ 62% / 24h</span></div>${chart}<div style="font-size:10px;color:#64748b;margin:6px 0 14px;font-family:'DM Sans',sans-serif">Current: <strong style="color:#dc2626">${lfi}</strong> — Type 0092 / <em>M. parvicella</em></div>${filamentImgPair()}</div>`;
+  m.addEventListener('click',e=>{if(e.target===m)m.remove();});
+  document.body.appendChild(m);
+}
+
+function openSVIModal(){
+  if(document.getElementById('svi-modal')) return;
+  const chart=lchrt(svA,'#d97706',{threshold:150,thresholdLabel:'bulking threshold',forecastData:svF,showConfidence:true,yLabel:'mL/g',height:160});
+  const m=document.createElement('div');
+  m.id='svi-modal';
+  m.className='modal-overlay';
+  m.innerHTML=`<div class="modal-box"><button class="modal-close" onclick="document.getElementById('svi-modal').remove()">✕</button><div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:12px;font-family:'DM Sans',sans-serif">SVI — Live + Forecast <span class="badge b-warn">150+ in 48h</span></div>${chart}<div style="font-size:10px;color:#64748b;margin:6px 0 14px;font-family:'DM Sans',sans-serif">Current: <strong style="color:#1e293b">${lsvi}</strong> mL/g — +1.1/hr</div>${flocImgPair()}</div>`;
+  m.addEventListener('click',e=>{if(e.target===m)m.remove();});
+  document.body.appendChild(m);
 }
 
 setInterval(()=>{const n=new Date();document.getElementById('clock').textContent=n.toLocaleDateString()+' '+n.toLocaleTimeString();},1000);
