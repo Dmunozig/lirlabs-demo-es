@@ -463,14 +463,14 @@ function renderS(){
   let h=s;
 
   if(!on){
-    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATO FALTANTE: Índice de Volumen de Lodo (IVL)</div>
+    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>FALTA DE DATOS: Índice de Volumen de Lodo (IVL)</div>
     <div class="scada-blind-body"><strong>Última lectura: 118 mL/g</strong> — muestra tomada hace 5 días<br>Frecuencia: 1 muestra manual semanal<br>Próxima programada: en 2 días<br><br>⚠ Sin monitorización continua. Los cambios entre muestras no se detectan.</div>
     <div class="scada-blind-overlay"></div></div>`;
-    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATO FALTANTE: Dosificación Química — PAC</div>
-    <div class="scada-blind-body"><strong>Tasa fija: 6,0 g/L</strong> — último ajuste hace 2 semanas<br>Modo: constante (ajustado por operario)<br>Sin vínculo con el estado biológico. Sin dosificación predictiva.</div>
+    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>FALTA DE DATOS: Dosificación Química — PAC</div>
+    <div class="scada-blind-body"><strong>Tasa fija: 6,0 g/L</strong> — último ajuste hace 2 semanas<br>Modo: constante (ajustado por operador)<br>Sin vínculo con el estado biológico. Sin dosificación predictiva.</div>
     <div class="scada-blind-overlay"></div></div>`;
-    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATO FALTANTE: Eventos de Espuma / Esponjamiento</div>
-    <div class="scada-blind-body">Último evento: hace 12 días — Duración: ~6 horas<br>Causa: crecimiento filamentoso sospechado <strong>(sin confirmar)</strong><br>Respuesta: antiespumante de emergencia + verificación manual de IVL<br>Coste: ~€2.400 (antiespumante + horas extra de operario)<br><br>⚠ Eventos registrados de forma reactiva. Sin sistema de alerta temprana.</div>
+    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>FALTA DE DATOS: Espuma</div>
+    <div class="scada-blind-body">Último evento: hace 12 días — Duración: ~6 horas<br>Causa: crecimiento filamentoso sospechado <strong>(sin confirmar)</strong><br>Respuesta: antiespumante de emergencia + verificación manual de IVL<br>Coste: ~€2.400 (antiespumante + horas extra de operador)<br><br>⚠ Eventos registrados de forma reactiva. Sin sistema de alerta temprana.</div>
     <div class="scada-blind-overlay"></div></div>`;
   }
 
@@ -506,7 +506,7 @@ function renderL(){
 
   h+=`<div class="cc lb"><div class="cc-title">Optimización Energética de Aireación <span class="badge" style="background:#dcfce7;color:#16a34a;font-size:9px">↓11% · €26.000/año</span></div>${aerationChart()}<div class="cc-note" style="color:#16a34a;font-weight:600">Control de aireación ajustado al precio de la energía</div></div>`;
 
-  h+=`<div class="recs"><div class="recs-t" style="justify-content:space-between"><span style="display:flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Recomendaciones</span><span onclick="openOpsModal()" style="font-size:9px;font-weight:600;color:#16a34a;cursor:pointer;background:#dcfce7;padding:2px 8px;border-radius:10px;white-space:nowrap">✓ Operarios notificados — ver mensaje</span></div>`;
+  h+=`<div class="recs"><div class="recs-t" style="justify-content:space-between"><span style="display:flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Recomendaciones</span><span onclick="openOpsModal()" style="font-size:9px;font-weight:600;color:#16a34a;cursor:pointer;background:#dcfce7;padding:2px 8px;border-radius:10px;white-space:nowrap">✓ Operadors notificados — ver mensaje</span></div>`;
   h+=`<div class="ri"><div class="rn">1</div><div><div class="rm">Dosificación PAC: 6,0 → 8,5 g/L</div><div class="rs">Estabilización del IF en 18h.</div></div></div>`;
   h+=`<div class="ri"><div class="rn">2</div><div><div class="rm">Consigna OD: 1,9 → 2,3 mg/L (zonas 3-4)</div><div class="rs">+€12/día energía vs €2.400 de evento de espuma evitado.</div></div></div>`;
   h+=`<div class="ri"><div class="rn">3</div><div><div class="rm">Reducir TRS 0,5 días</div><div class="rs">Presión selectiva sobre organismos filamentosos. Margen NH₄: 1,2 mg/L.</div></div></div>`;
@@ -526,7 +526,7 @@ function openOpsModal(){
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
       <div style="width:36px;height:36px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.1 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg></div>
       <div>
-        <div style="font-size:13px;font-weight:700;color:#1e293b;font-family:'DM Sans',sans-serif">Notificación a Operarios</div>
+        <div style="font-size:13px;font-weight:700;color:#1e293b;font-family:'DM Sans',sans-serif">Notificación a Operadors</div>
         <div style="font-size:10px;color:#64748b;font-family:'DM Sans',sans-serif">Enviado ${ts} · vía alerta SCADA + SMS</div>
       </div>
     </div>
@@ -691,7 +691,7 @@ function openGuide(){
     {icon:'🔴',bg:'#fef2f2',title:'Alerta crítica — clic para expandir',desc:'Haz clic en la tarjeta roja "IVL Proyectado a Superar 150" para revelar imágenes de microscopía de las bacterias filamentosas detectadas por la cámara Lir.'},
     {icon:'🔬',bg:'#f0fdf4',title:'Imágenes de microscopía — cursor y clic',desc:'Pasa el cursor sobre cualquier imagen de microscopía para activar o desactivar las anotaciones de IA. Haz clic en una imagen para abrirla a pantalla completa.'},
     {icon:'📈',bg:'#fefce8',title:'Tarjetas de gráficos — clic para detalle',desc:'Haz clic en las tarjetas de Índice Filamentoso, IVL o Distribución de Tamaño de Flóculo para abrir una vista ampliada con datos históricos y pronósticos.'},
-    {icon:'📋',bg:'#f0fdf4',title:'Notificación a operarios',desc:'En la sección de Recomendaciones, haz clic en la insignia verde "Operarios notificados" para leer el mensaje de alerta automático completo enviado a los operarios.'},
+    {icon:'📋',bg:'#f0fdf4',title:'Notificación a operadors',desc:'En la sección de Recomendaciones, haz clic en la insignia verde "Operadors notificados" para leer el mensaje de alerta automático completo enviado a los operadors.'},
   ];
   const m=document.createElement('div');
   m.id='guide-modal';
