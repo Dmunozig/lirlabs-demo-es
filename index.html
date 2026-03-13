@@ -23,14 +23,14 @@
   .clock { font-size: 11px; color: #fff; font-family: 'DM Mono', 'Courier New', monospace; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); }
 
   /* Toggle — sits in header as a modern element hinting at Lir */
-  .toggle-btn { display: flex; align-items: center; gap: 10px; padding: 3px 10px 3px 14px; border-radius: 14px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; transition: all 0.3s; user-select: none; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .toggle-btn { display: flex; align-items: center; gap: 12px; padding: 6px 14px 6px 18px; border-radius: 20px; border: 1.5px solid #cbd5e1; background: #fff; cursor: pointer; transition: all 0.3s; user-select: none; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
   .toggle-btn.active { border-color: #93c5fd; background: #eff6ff; box-shadow: 0 1px 3px rgba(37,99,235,0.15); }
-  .toggle-label { font-size: 11px; font-weight: 600; color: #475569; font-family: 'DM Sans', sans-serif; transition: color 0.3s; }
+  .toggle-label { font-size: 13px; font-weight: 700; color: #475569; font-family: 'DM Sans', sans-serif; transition: color 0.3s; }
   .toggle-btn.active .toggle-label { color: #2563eb; }
-  .toggle-track { width: 32px; height: 16px; border-radius: 8px; padding: 2px; background: #cbd5e1; transition: background 0.3s; }
+  .toggle-track { width: 40px; height: 22px; border-radius: 11px; padding: 3px; background: #cbd5e1; transition: background 0.3s; }
   .toggle-btn.active .toggle-track { background: #2563eb; }
-  .toggle-thumb { width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.3); transition: transform 0.3s; }
-  .toggle-btn.active .toggle-thumb { transform: translateX(16px); }
+  .toggle-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.3); transition: transform 0.3s; }
+  .toggle-btn.active .toggle-thumb { transform: translateX(18px); }
 
   /* ======== MENU BAR — classic Win32 ======== */
   .menubar {
@@ -196,6 +196,13 @@
     display: flex; align-items: center; justify-content: center;
   }
   #guide-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(37,99,235,0.5); }
+
+  /* ======== TOGGLE PULSE ======== */
+  @keyframes togglePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.5); }
+    50% { box-shadow: 0 0 0 8px rgba(37,99,235,0); }
+  }
+  .toggle-btn:not(.active) { animation: togglePulse 1.6s ease-in-out infinite; }
 
   .guide-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
   .guide-item:last-child { border-bottom: none; padding-bottom: 0; }
@@ -467,7 +474,7 @@ function renderS(){
     <div class="scada-blind-overlay"></div></div>`;
   }
 
-  h+=`<div class="statusbar" style="margin-top:6px"><div class="statusbar-item"><span class="status-led led-green"></span>PLC Online</div><div class="statusbar-item"><span class="status-led led-green"></span>SCADA Link</div><div class="statusbar-item"><span class="status-led led-amber"></span>Biology: NO DATA</div><div class="statusbar-item">Alarms: ${on?'0':'3'} active</div></div>`;
+  h+=`<div class="statusbar" style="margin-top:6px"><div class="statusbar-item"><span class="status-led led-green"></span>PLC Online</div><div class="statusbar-item"><span class="status-led led-green"></span>SCADA Link</div><div class="statusbar-item"><span class="status-led ${on?'led-green':'led-amber'}"></span>${on?'Biology: REALTIME ACTIVE':'Biology: NO DATA'}</div><div class="statusbar-item">Alarms: ${on?'2':'8'} active</div></div>`;
 
   document.getElementById('scada').innerHTML=h;
 }
@@ -481,7 +488,7 @@ function renderL(){
   let h=`<div class="lir-hdr"><div class="lir-dot"></div><span class="lir-txt">Lir Biological Intelligence</span><span class="live">LIVE</span></div>`;
 
   // Critical alert — red, expandable on click
-  h+=`<div class="la crit expandable" onclick="toggleSVIAlert(this)"><div class="la-icon">${iconAlertCircle('#dc2626')}</div><div class="la-content"><div class="la-t">SVI Projected to Exceed 150 in 48hrs</div><div class="la-d">Filamentous bacteria density +62% / 24h. Elongated filaments consistent with M. parvicella.</div><div class="la-a">⚡ Increase PAC to 8.5 g/L · Adjust DO to 2.3 mg/L</div><div class="floc-imgs" style="display:none"><img class="floc-img" src="microscopy_images/Floc1_annotated.png" onmouseover="this.src='microscopy_images/Floc1_unannotated.png'" onmouseout="this.src='microscopy_images/Floc1_annotated.png'" onclick="event.stopPropagation();openImgModal(this.src)"><img class="floc-img" src="microscopy_images/Floc2_annotated.png" onmouseover="this.src='microscopy_images/Floc2_unannotated.png'" onmouseout="this.src='microscopy_images/Floc2_annotated.png'" onclick="event.stopPropagation();openImgModal(this.src)"></div></div></div>`;
+  h+=`<div class="la crit expandable" onclick="toggleSVIAlert(this)"><div class="la-icon">${iconAlertCircle('#dc2626')}</div><div class="la-content"><div class="la-t">SVI Projected to Exceed 150 in 48hrs</div><div class="la-d">Filamentous bacteria density +62% / 24h. Elongated filaments consistent with M. parvicella.</div><div class="la-a">⚡ Increase PAC to 8.5 g/L · Adjust DO to 2.3 mg/L</div><div class="floc-imgs"><img class="floc-img" src="microscopy_images/Floc1_annotated.png" onmouseover="this.src='microscopy_images/Floc1_unannotated.png'" onmouseout="this.src='microscopy_images/Floc1_annotated.png'" onclick="event.stopPropagation();openImgModal(this.src)"><img class="floc-img" src="microscopy_images/Floc2_annotated.png" onmouseover="this.src='microscopy_images/Floc2_unannotated.png'" onmouseout="this.src='microscopy_images/Floc2_annotated.png'" onclick="event.stopPropagation();openImgModal(this.src)"></div></div></div>`;
 
   // Warning alert — amber, AlertTriangle icon
   h+=`<div class="la warn"><div class="la-icon">${iconAlertTriangle('#d97706')}</div><div class="la-content"><div class="la-t">Foam Risk ${lfm}% — Elevated</div><div class="la-d">Surface imaging detects foam precursors. Action within 12h.</div></div></div>`;
