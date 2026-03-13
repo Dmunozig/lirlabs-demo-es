@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lir Labs — Plant Dashboard Demo</title>
+<title>Lir Labs — Demo Panel de Planta</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -231,7 +231,7 @@
 <div class="header">
   <div class="header-left">
     <svg class="header-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="2" stroke="#fff" stroke-width="1.5"/><circle cx="8" cy="8" r="3" stroke="#fff" stroke-width="1"/><line x1="8" y1="2" x2="8" y2="5" stroke="#fff" stroke-width="1"/><line x1="8" y1="11" x2="8" y2="14" stroke="#fff" stroke-width="1"/><line x1="2" y1="8" x2="5" y2="8" stroke="#fff" stroke-width="1"/><line x1="11" y1="8" x2="14" y2="8" stroke="#fff" stroke-width="1"/></svg>
-    <span class="header-title">SCADA Control — Municipal WWTP 50,000 PE</span>
+    <span class="header-title">Control SCADA — EDAR Municipal 50.000 PE</span>
   </div>
   <div class="header-right">
     <span class="clock" id="clock"></span>
@@ -241,22 +241,22 @@
 <!-- Menu bar -->
 <div class="menubar">
   <div class="menubar-left">
-    <span class="menu-item">File</span>
-    <span class="menu-item">View</span>
-    <span class="menu-item">Process</span>
-    <span class="menu-item">Alarms</span>
-    <span class="menu-item">Reports</span>
-    <span class="menu-item">Tools</span>
-    <span class="menu-item">Help</span>
+    <span class="menu-item">Archivo</span>
+    <span class="menu-item">Vista</span>
+    <span class="menu-item">Proceso</span>
+    <span class="menu-item">Alarmas</span>
+    <span class="menu-item">Informes</span>
+    <span class="menu-item">Herramientas</span>
+    <span class="menu-item">Ayuda</span>
   </div>
   <div class="menubar-center">
     <button class="toggle-btn" id="tbtn" onclick="toggle()">
-      <span class="toggle-label" id="tlbl">Enable Lir</span>
+      <span class="toggle-label" id="tlbl">Activar Lir</span>
       <div class="toggle-track"><div class="toggle-thumb" id="tthumb"></div></div>
     </button>
   </div>
   <div class="menubar-right">
-    <span>PLC: CONNECTED</span>
+    <span>PLC: CONECTADO</span>
     <span>SCADA v4.2.1</span>
   </div>
 </div>
@@ -268,7 +268,7 @@
 </div>
 
 <!-- Guide button -->
-<button id="guide-btn" onclick="openGuide()" title="How to use this demo">?</button>
+<button id="guide-btn" onclick="openGuide()" title="Cómo usar esta demo">?</button>
 
 <script>
 function g(h,fn,n){const now=new Date();return Array.from({length:h},(_,i)=>({time:new Date(now.getTime()-(h-i)*36e5).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),hour:i,value:fn(i)+(Math.random()-.5)*n}))}
@@ -320,7 +320,7 @@ function lchrt(d,c,o={}){
   s+=`<polyline points="${d.map((x,i)=>`${tX(i)},${tY(x.value)}`).join(' ')}" fill="none" stroke="${c}" stroke-width="2"/>`;
   if(fd){s+=`<polyline points="${tX(d.length-1)},${tY(d[d.length-1].value)} ${fd.map((x,i)=>`${tX(d.length+i)},${tY(x.value)}`).join(' ')}" fill="none" stroke="${c}" stroke-width="2" stroke-dasharray="6,4" opacity="0.7"/>`;
   s+=`<line x1="${tX(d.length-1)}" y1="${p.t}" x2="${tX(d.length-1)}" y2="${p.t+pH}" stroke="#d1d5db" stroke-width="1" stroke-dasharray="3,3"/>`;
-  s+=`<text x="${tX(d.length+2)}" y="${p.t+10}" font-size="8" fill="#9ca3af">forecast →</text>`;}
+  s+=`<text x="${tX(d.length+2)}" y="${p.t+10}" font-size="8" fill="#9ca3af">pronóstico →</text>`;}
   const st=Math.floor(d.length/5);d.forEach((x,i)=>{if(i%st===0)s+=`<text x="${tX(i)}" y="${H-2}" text-anchor="middle" font-size="8" fill="#9ca3af">${x.time}</text>`;});
   return s+'</svg>';}
 
@@ -336,7 +336,7 @@ let on=false;
 function toggle(){
   on=!on;
   document.getElementById('tbtn').className=on?'toggle-btn active':'toggle-btn';
-  document.getElementById('tlbl').textContent=on?'Lir Active':'Enable Lir';
+  document.getElementById('tlbl').textContent=on?'Lir Activo':'Activar Lir';
   document.getElementById('lir').className=on?'lir-panel open':'lir-panel';
   renderS();renderL();
 }
@@ -429,7 +429,7 @@ function renderS(){
   s+=`<circle cx="${rPx}" cy="${rasY}" r="13" fill="#e2e8f0" stroke="#9ca3af" stroke-width="1.5"/>`;
   s+=`<polygon points="${rPx-7},${rasY-5} ${rPx+9},${rasY} ${rPx-7},${rasY+5}" fill="#9ca3af"/>`;
   s+=`<text x="${rPx}" y="${rasY-18}" text-anchor="middle" font-size="9" font-weight="600" fill="${muted}" font-family="'DM Sans',sans-serif">P-RAS</text>`;
-  s+=`<text x="${rPx}" y="${rasY+22}" text-anchor="middle" font-size="8" fill="${muted}" font-family="'DM Sans',sans-serif">Return Activated Sludge (RAS)</text>`;
+  s+=`<text x="${rPx}" y="${rasY+22}" text-anchor="middle" font-size="8" fill="${muted}" font-family="'DM Sans',sans-serif">Lodo Activado en Retorno (LAR)</text>`;
 
   // ── GAUGES ──
   s+=gauge(48,35,'FIT-101','438','m³/h','600',438/600,100);
@@ -437,25 +437,25 @@ function renderS(){
   s+=gauge(atX+atW-42,18,'AT-202','2.81','NH₄ mg/L','8.0',2.81/8,85);
 
   // ── TANKS (drawn before components so components render on top) ──
-  s+=tank(atX,atY,atW,atH,0.65,'Aeration Basin','65%',doD);
-  s+=tank(scX,scY,scW,scH,0.45,'Secondary Clarifier','45%');
+  s+=tank(atX,atY,atW,atH,0.65,'Cuba de Aireación','65%',doD);
+  s+=tank(scX,scY,scW,scH,0.45,'Decantador Secundario','45%');
 
   // ── MIXER ──
   s+=mixer(atX+(atW>>1),atY);
 
   // ── PUMPS & VALVES ──
-  s+=pump(130,pY,'P-101','65% Running');
-  s+=valve(213,pY,'V-101','80% Open');
-  s+=pump(558,pY,'P-201','75% Running');
-  s+=valve(852,pY,'V-301','60% Open');
+  s+=pump(130,pY,'P-101','65% Activa');
+  s+=valve(213,pY,'V-101','80% Abierta');
+  s+=pump(558,pY,'P-201','75% Activa');
+  s+=valve(852,pY,'V-301','60% Abierta');
 
   // ── LABELS ──
-  s+=`<text x="22" y="${pY-16}" font-size="11" font-weight="700" fill="${dark}" font-family="'DM Sans',sans-serif">Influent</text>`;
-  s+=`<text x="980" y="${pY-16}" font-size="11" font-weight="700" fill="${dark}" font-family="'DM Sans',sans-serif">Effluent</text>`;
+  s+=`<text x="22" y="${pY-16}" font-size="11" font-weight="700" fill="${dark}" font-family="'DM Sans',sans-serif">Afluente</text>`;
+  s+=`<text x="980" y="${pY-16}" font-size="11" font-weight="700" fill="${dark}" font-family="'DM Sans',sans-serif">Efluente</text>`;
 
   // Energy badge
   s+=`<rect x="808" y="14" width="142" height="36" fill="rgba(255,255,255,0.75)" stroke="#c8cfd8" stroke-width="1"/>`;
-  s+=`<text x="879" y="29" text-anchor="middle" font-size="9" font-weight="600" fill="${muted}" font-family="'DM Sans',sans-serif">ENERGY</text>`;
+  s+=`<text x="879" y="29" text-anchor="middle" font-size="9" font-weight="600" fill="${muted}" font-family="'DM Sans',sans-serif">ENERGÍA</text>`;
   s+=`<text x="879" y="44" text-anchor="middle" font-size="11" font-weight="700" fill="${acc}" font-family="'DM Mono',monospace">152 kWh  ↑4%</text>`;
 
   s+='</svg>';
@@ -463,18 +463,18 @@ function renderS(){
   let h=s;
 
   if(!on){
-    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATA GAP: Sludge Volume Index (SVI)</div>
-    <div class="scada-blind-body"><strong>Last reading: 118 mL/g</strong> — sampled 5 days ago<br>Frequency: 1x weekly manual grab sample<br>Next scheduled: 2 days<br><br>⚠ No continuous monitoring. Changes between samples are undetected.</div>
+    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATO FALTANTE: Índice de Volumen de Lodo (IVL)</div>
+    <div class="scada-blind-body"><strong>Última lectura: 118 mL/g</strong> — muestra tomada hace 5 días<br>Frecuencia: 1 muestra manual semanal<br>Próxima programada: en 2 días<br><br>⚠ Sin monitorización continua. Los cambios entre muestras no se detectan.</div>
     <div class="scada-blind-overlay"></div></div>`;
-    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATA GAP: Chemical Dosing — PAC</div>
-    <div class="scada-blind-body"><strong>Fixed rate: 6.0 g/L</strong> — last adjusted 2 weeks ago<br>Mode: constant (operator-set)<br>No link to biological state. No predictive dosing capability.</div>
+    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATO FALTANTE: Dosificación Química — PAC</div>
+    <div class="scada-blind-body"><strong>Tasa fija: 6,0 g/L</strong> — último ajuste hace 2 semanas<br>Modo: constante (ajustado por operario)<br>Sin vínculo con el estado biológico. Sin dosificación predictiva.</div>
     <div class="scada-blind-overlay"></div></div>`;
-    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATA GAP: Foam / Bulking Events</div>
-    <div class="scada-blind-body">Last event: 12 days ago — Duration: ~6 hours<br>Cause: suspected filamentous growth <strong>(unconfirmed)</strong><br>Response: emergency antifoam + manual SVI check<br>Cost: ~€2,400 (antifoam + operator overtime)<br><br>⚠ Events logged reactively. No early warning system.</div>
+    h+=`<div class="scada-blind"><div class="scada-blind-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>DATO FALTANTE: Eventos de Espuma / Esponjamiento</div>
+    <div class="scada-blind-body">Último evento: hace 12 días — Duración: ~6 horas<br>Causa: crecimiento filamentoso sospechado <strong>(sin confirmar)</strong><br>Respuesta: antiespumante de emergencia + verificación manual de IVL<br>Coste: ~€2.400 (antiespumante + horas extra de operario)<br><br>⚠ Eventos registrados de forma reactiva. Sin sistema de alerta temprana.</div>
     <div class="scada-blind-overlay"></div></div>`;
   }
 
-  h+=`<div class="statusbar" style="margin-top:6px"><div class="statusbar-item"><span class="status-led led-green"></span>PLC Online</div><div class="statusbar-item"><span class="status-led led-green"></span>SCADA Link</div><div class="statusbar-item"><span class="status-led ${on?'led-green':'led-amber'}"></span>${on?'Biology: REALTIME ACTIVE':'Biology: NO DATA'}</div><div class="statusbar-item">Alarms: ${on?'2':'8'} active</div></div>`;
+  h+=`<div class="statusbar" style="margin-top:6px"><div class="statusbar-item"><span class="status-led led-green"></span>PLC En Línea</div><div class="statusbar-item"><span class="status-led led-green"></span>Enlace SCADA</div><div class="statusbar-item"><span class="status-led ${on?'led-green':'led-amber'}"></span>${on?'Biología: TIEMPO REAL ACTIVO':'Biología: SIN DATOS'}</div><div class="statusbar-item">Alarmas: ${on?'2':'8'} activas</div></div>`;
 
   document.getElementById('scada').innerHTML=h;
 }
@@ -485,31 +485,31 @@ const iconCircleCheck = (color) => `<svg width="14" height="14" viewBox="0 0 24 
 
 function renderL(){
   if(!on){document.getElementById('lir-inner').innerHTML='';return;}
-  let h=`<div class="lir-hdr"><div class="lir-dot"></div><span class="lir-txt">Lir Biological Intelligence</span><span class="live">LIVE</span></div>`;
+  let h=`<div class="lir-hdr"><div class="lir-dot"></div><span class="lir-txt">Inteligencia Biológica Lir</span><span class="live">EN VIVO</span></div>`;
 
   // Critical alert — red, expandable on click
-  h+=`<div class="la crit expandable" onclick="toggleSVIAlert(this)"><div class="la-icon">${iconAlertCircle('#dc2626')}</div><div class="la-content"><div class="la-t">SVI Projected to Exceed 150 in 48hrs</div><div class="la-d">Filamentous bacteria density +62% / 24h. Elongated filaments consistent with M. parvicella.</div><div class="la-a">⚡ Increase PAC to 8.5 g/L · Adjust DO to 2.3 mg/L</div><div class="floc-imgs"><img class="floc-img" src="microscopy_images/Floc1_annotated.png" onmouseover="this.src='microscopy_images/Floc1_unannotated.png'" onmouseout="this.src='microscopy_images/Floc1_annotated.png'" onclick="event.stopPropagation();openImgModal(this.src)"><img class="floc-img" src="microscopy_images/Floc2_annotated.png" onmouseover="this.src='microscopy_images/Floc2_unannotated.png'" onmouseout="this.src='microscopy_images/Floc2_annotated.png'" onclick="event.stopPropagation();openImgModal(this.src)"></div></div></div>`;
+  h+=`<div class="la crit expandable" onclick="toggleSVIAlert(this)"><div class="la-icon">${iconAlertCircle('#dc2626')}</div><div class="la-content"><div class="la-t">IVL Proyectado a Superar 150 en 48h</div><div class="la-d">Densidad de bacterias filamentosas +62% / 24h. Filamentos elongados consistentes con M. parvicella.</div><div class="la-a">⚡ Aumentar PAC a 8,5 g/L · Ajustar OD a 2,3 mg/L</div><div class="floc-imgs"><img class="floc-img" src="microscopy_images/Floc1_annotated.png" onmouseover="this.src='microscopy_images/Floc1_unannotated.png'" onmouseout="this.src='microscopy_images/Floc1_annotated.png'" onclick="event.stopPropagation();openImgModal(this.src)"><img class="floc-img" src="microscopy_images/Floc2_annotated.png" onmouseover="this.src='microscopy_images/Floc2_unannotated.png'" onmouseout="this.src='microscopy_images/Floc2_annotated.png'" onclick="event.stopPropagation();openImgModal(this.src)"></div></div></div>`;
 
   // Warning alert — amber, AlertTriangle icon
-  h+=`<div class="la warn"><div class="la-icon">${iconAlertTriangle('#d97706')}</div><div class="la-content"><div class="la-t">Foam Risk ${lfm}% — Elevated</div><div class="la-d">Surface imaging detects foam precursors. Action within 12h.</div></div></div>`;
+  h+=`<div class="la warn"><div class="la-icon">${iconAlertTriangle('#d97706')}</div><div class="la-content"><div class="la-t">Riesgo de Espuma ${lfm}% — Elevado</div><div class="la-d">Las imágenes superficiales detectan precursores de espuma. Acción necesaria en 12h.</div></div></div>`;
 
   // Success alert — green, CircleCheck icon
-  h+=`<div class="la ok"><div class="la-icon">${iconCircleCheck('#16a34a')}</div><div class="la-content"><div class="la-t">NH₄-N Within Consent Limits</div><div class="la-d">Effluent ammonium at 2.81 mg/L — 1.19 mg/L below the 4 mg/L threshold.</div></div></div>`;
+  h+=`<div class="la ok"><div class="la-icon">${iconCircleCheck('#16a34a')}</div><div class="la-content"><div class="la-t">NH₄-N Dentro de los Límites de Vertido</div><div class="la-d">Amonio en efluente a 2,81 mg/L — 1,19 mg/L por debajo del umbral de 4 mg/L.</div></div></div>`;
 
-  h+=`<div class="cc lb" style="cursor:pointer" onclick="openFIModal()"><div class="cc-title">Filamentous Index <span class="badge b-alert">↑ 62% / 24h</span></div>${lchrt(fiD,'#dc2626',{threshold:40,thresholdLabel:'action threshold',yLabel:'FI'})}<div class="cc-note">Current: <span class="red">${lfi}</span> — Type 0092 / <em>M. parvicella</em></div></div>`;
+  h+=`<div class="cc lb" style="cursor:pointer" onclick="openFIModal()"><div class="cc-title">Índice Filamentoso <span class="badge b-alert">↑ 62% / 24h</span></div>${lchrt(fiD,'#dc2626',{threshold:40,thresholdLabel:'umbral de acción',yLabel:'IF'})}<div class="cc-note">Actual: <span class="red">${lfi}</span> — Tipo 0092 / <em>M. parvicella</em></div></div>`;
 
-  h+=`<div class="cc lb" style="cursor:pointer" onclick="openSVIModal()"><div class="cc-title">SVI — Live + Forecast <span class="badge b-warn">150+ in 48h</span></div>${lchrt(svA,'#d97706',{threshold:150,thresholdLabel:'bulking threshold',forecastData:svF,showConfidence:true,yLabel:'mL/g'})}<div class="cc-note">Current: <strong>${lsvi}</strong> mL/g — +1.1/hr</div></div>`;
+  h+=`<div class="cc lb" style="cursor:pointer" onclick="openSVIModal()"><div class="cc-title">IVL — En Vivo + Pronóstico <span class="badge b-warn">150+ en 48h</span></div>${lchrt(svA,'#d97706',{threshold:150,thresholdLabel:'umbral de esponjamiento',forecastData:svF,showConfidence:true,yLabel:'mL/g'})}<div class="cc-note">Actual: <strong>${lsvi}</strong> mL/g — +1,1/h</div></div>`;
 
-  h+=`<div class="cc lb" style="cursor:pointer" onclick="openFlocModal()"><div class="cc-title">Floc Size Distribution</div>${lbar(fcD,'#2563eb')}<div class="cc-note">Median: <strong>125 µm</strong> — real-time via Lir imager</div></div>`;
+  h+=`<div class="cc lb" style="cursor:pointer" onclick="openFlocModal()"><div class="cc-title">Distribución de Tamaño de Flóculo</div>${lbar(fcD,'#2563eb')}<div class="cc-note">Mediana: <strong>125 µm</strong> — tiempo real vía cámara Lir</div></div>`;
 
-  h+=`<div class="cc lb"><div class="cc-title">Foam Risk <span class="badge b-warn">${lfm}%</span></div>${lchrt(fmD,'#ea580c',{threshold:70,thresholdLabel:'high risk',yLabel:'%',height:80})}</div>`;
+  h+=`<div class="cc lb"><div class="cc-title">Riesgo de Espuma <span class="badge b-warn">${lfm}%</span></div>${lchrt(fmD,'#ea580c',{threshold:70,thresholdLabel:'alto riesgo',yLabel:'%',height:80})}</div>`;
 
-  h+=`<div class="cc lb"><div class="cc-title">Aeration Energy Optimisation <span class="badge" style="background:#dcfce7;color:#16a34a;font-size:9px">↓11% · €26,000/yr</span></div>${aerationChart()}<div class="cc-note" style="color:#16a34a;font-weight:600">Energy price adjusted aeration control</div></div>`;
+  h+=`<div class="cc lb"><div class="cc-title">Optimización Energética de Aireación <span class="badge" style="background:#dcfce7;color:#16a34a;font-size:9px">↓11% · €26.000/año</span></div>${aerationChart()}<div class="cc-note" style="color:#16a34a;font-weight:600">Control de aireación ajustado al precio de la energía</div></div>`;
 
-  h+=`<div class="recs"><div class="recs-t" style="justify-content:space-between"><span style="display:flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Recommendations</span><span onclick="openOpsModal()" style="font-size:9px;font-weight:600;color:#16a34a;cursor:pointer;background:#dcfce7;padding:2px 8px;border-radius:10px;white-space:nowrap">✓ Operators notified — see message</span></div>`;
-  h+=`<div class="ri"><div class="rn">1</div><div><div class="rm">PAC dosing: 6.0 → 8.5 g/L</div><div class="rs">FI stabilisation within 18h.</div></div></div>`;
-  h+=`<div class="ri"><div class="rn">2</div><div><div class="rm">DO setpoint: 1.9 → 2.3 mg/L (zones 3-4)</div><div class="rs">+€12/day energy vs €2,400 avoided foam event.</div></div></div>`;
-  h+=`<div class="ri"><div class="rn">3</div><div><div class="rm">Reduce SRT by 0.5 days</div><div class="rs">Selective pressure on filamentous organisms. NH₄ margin: 1.2 mg/L.</div></div></div>`;
+  h+=`<div class="recs"><div class="recs-t" style="justify-content:space-between"><span style="display:flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Recomendaciones</span><span onclick="openOpsModal()" style="font-size:9px;font-weight:600;color:#16a34a;cursor:pointer;background:#dcfce7;padding:2px 8px;border-radius:10px;white-space:nowrap">✓ Operarios notificados — ver mensaje</span></div>`;
+  h+=`<div class="ri"><div class="rn">1</div><div><div class="rm">Dosificación PAC: 6,0 → 8,5 g/L</div><div class="rs">Estabilización del IF en 18h.</div></div></div>`;
+  h+=`<div class="ri"><div class="rn">2</div><div><div class="rm">Consigna OD: 1,9 → 2,3 mg/L (zonas 3-4)</div><div class="rs">+€12/día energía vs €2.400 de evento de espuma evitado.</div></div></div>`;
+  h+=`<div class="ri"><div class="rn">3</div><div><div class="rm">Reducir TRS 0,5 días</div><div class="rs">Presión selectiva sobre organismos filamentosos. Margen NH₄: 1,2 mg/L.</div></div></div>`;
   h+='</div>';
 
   document.getElementById('lir-inner').innerHTML=h;
@@ -526,19 +526,19 @@ function openOpsModal(){
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
       <div style="width:36px;height:36px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.1 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg></div>
       <div>
-        <div style="font-size:13px;font-weight:700;color:#1e293b;font-family:'DM Sans',sans-serif">Operator Notification</div>
-        <div style="font-size:10px;color:#64748b;font-family:'DM Sans',sans-serif">Sent ${ts} · via SCADA alert + SMS</div>
+        <div style="font-size:13px;font-weight:700;color:#1e293b;font-family:'DM Sans',sans-serif">Notificación a Operarios</div>
+        <div style="font-size:10px;color:#64748b;font-family:'DM Sans',sans-serif">Enviado ${ts} · vía alerta SCADA + SMS</div>
       </div>
     </div>
     <div style="background:#f8fafc;border-radius:10px;padding:14px 16px;font-family:'DM Sans',sans-serif;font-size:11px;line-height:1.7;color:#1e293b;border-left:3px solid #2563eb">
-      <div style="font-weight:700;margin-bottom:8px;color:#0f172a">ACTION REQUIRED — Biological Treatment Alert</div>
-      <div style="margin-bottom:6px">Lir has detected an elevated filamentous index with SVI projected to exceed <strong>150 mL/g</strong> within <strong>48 hours</strong>. Immediate intervention is required.</div>
-      <div style="margin-bottom:4px;font-weight:600;color:#2563eb">Directive 1 — Increase PAC Dosing</div>
-      <div style="margin-bottom:10px;color:#475569">Raise PAC setpoint from <strong>6.0 g/L → 8.5 g/L</strong>. Apply to dosing pump P-PAC-01. Expected FI stabilisation within 18h.</div>
-      <div style="margin-bottom:4px;font-weight:600;color:#2563eb">Directive 2 — Adjust DO Setpoint</div>
-      <div style="color:#475569">Increase dissolved oxygen target from <strong>1.9 → 2.3 mg/L</strong> in aeration zones 3–4. Energy cost: +€12/day vs. ~€2,400 for an avoided foam event.</div>
+      <div style="font-weight:700;margin-bottom:8px;color:#0f172a">ACCIÓN REQUERIDA — Alerta de Tratamiento Biológico</div>
+      <div style="margin-bottom:6px">Lir ha detectado un índice filamentoso elevado con IVL proyectado a superar <strong>150 mL/g</strong> en <strong>48 horas</strong>. Se requiere intervención inmediata.</div>
+      <div style="margin-bottom:4px;font-weight:600;color:#2563eb">Directiva 1 — Aumentar Dosificación PAC</div>
+      <div style="margin-bottom:10px;color:#475569">Aumentar consigna PAC de <strong>6,0 g/L → 8,5 g/L</strong>. Aplicar en bomba dosificadora P-PAC-01. Estabilización del IF esperada en 18h.</div>
+      <div style="margin-bottom:4px;font-weight:600;color:#2563eb">Directiva 2 — Ajustar Consigna OD</div>
+      <div style="color:#475569">Aumentar objetivo de oxígeno disuelto de <strong>1,9 → 2,3 mg/L</strong> en zonas de aireación 3–4. Coste energético: +€12/día vs. ~€2.400 de un evento de espuma evitado.</div>
     </div>
-    <div style="margin-top:12px;font-size:9px;color:#94a3b8;font-family:'DM Sans',sans-serif;text-align:right">Generated by Lir Biological Intelligence · ${ts}</div>
+    <div style="margin-top:12px;font-size:9px;color:#94a3b8;font-family:'DM Sans',sans-serif;text-align:right">Generado por Inteligencia Biológica Lir · ${ts}</div>
   </div>`;
   m.addEventListener('click',e=>{if(e.target===m)m.remove();});
   document.body.appendChild(m);
@@ -587,12 +587,12 @@ function aerationChart(){
   // Baseline line (blue)
   s+=`<polyline points="${bArr.map((_,i)=>`${tX(i).toFixed(1)},${vY(bArr[i]).toFixed(1)}`).join(' ')}" fill="none" stroke="#3b82f6" stroke-width="1.5"/>`;
   // X labels
-  [['Jan',0],['Apr',13],['Jul',26],['Oct',39],['Dec',52]].forEach(([l,t])=>{s+=`<text x="${tX(t).toFixed(1)}" y="${H-2}" text-anchor="middle" font-size="7" fill="#9ca3af">${l}</text>`;});
+  [['Ene',0],['Abr',13],['Jul',26],['Oct',39],['Dic',52]].forEach(([l,t])=>{s+=`<text x="${tX(t).toFixed(1)}" y="${H-2}" text-anchor="middle" font-size="7" fill="#9ca3af">${l}</text>`;});
   // Legend
   s+=`<line x1="${p.l+4}" y1="${p.t+5}" x2="${p.l+14}" y2="${p.t+5}" stroke="#3b82f6" stroke-width="1.5"/>`;
-  s+=`<text x="${p.l+17}" y="${p.t+8}" font-size="8" fill="#9ca3af">Baseline</text>`;
+  s+=`<text x="${p.l+17}" y="${p.t+8}" font-size="8" fill="#9ca3af">Referencia</text>`;
   s+=`<line x1="${p.l+62}" y1="${p.t+5}" x2="${p.l+72}" y2="${p.t+5}" stroke="#f97316" stroke-width="1.5"/>`;
-  s+=`<text x="${p.l+75}" y="${p.t+8}" font-size="8" fill="#9ca3af">Controlled</text>`;
+  s+=`<text x="${p.l+75}" y="${p.t+8}" font-size="8" fill="#9ca3af">Controlado</text>`;
   s+='</svg>';
   return s;
 }
@@ -638,10 +638,10 @@ function flocTrendChart(){
 
   // X-axis time labels
   svg+=`<text x="${pl}" y="${H-6}" text-anchor="middle" font-size="8" fill="#9ca3af">−24h</text>`;
-  svg+=`<text x="${pl+pW}" y="${H-6}" text-anchor="middle" font-size="8" fill="#9ca3af">now</text>`;
+  svg+=`<text x="${pl+pW}" y="${H-6}" text-anchor="middle" font-size="8" fill="#9ca3af">ahora</text>`;
   svg+=`<text x="${pl-4}" y="${pt}" text-anchor="end" font-size="7" fill="#9ca3af">µm</text>`;
-  svg+=`<text x="${pl+6}" y="${pt+11}" font-size="8" fill="#64748b" font-family="'DM Sans',sans-serif">50% distribution</text>`;
-  svg+=`<text x="${pl+6}" y="${pt+21}" font-size="8" fill="#64748b" font-family="'DM Sans',sans-serif">Median</text>`;
+  svg+=`<text x="${pl+6}" y="${pt+11}" font-size="8" fill="#64748b" font-family="'DM Sans',sans-serif">Distribución 50%</text>`;
+  svg+=`<text x="${pl+6}" y="${pt+21}" font-size="8" fill="#64748b" font-family="'DM Sans',sans-serif">Mediana</text>`;
   svg+='</svg>';
   return svg;
 }
@@ -653,7 +653,7 @@ function openFlocModal(){
   const m=document.createElement('div');
   m.id='floc-modal';
   m.className='modal-overlay';
-  m.innerHTML=`<div class="modal-box"><button class="modal-close" onclick="document.getElementById('floc-modal').remove()">✕</button><div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:12px;font-family:'DM Sans',sans-serif">Floc Size Distribution</div>${bar}<div style="font-size:10px;color:#64748b;margin:6px 0 16px;font-family:'DM Sans',sans-serif">Median: <strong style="color:#1e293b">125 µm</strong> — real-time via Lir imager</div><div style="font-size:11px;font-weight:600;color:#1e293b;margin-bottom:8px;font-family:'DM Sans',sans-serif">Distribution trend — last 24h</div>${trend}</div>`;
+  m.innerHTML=`<div class="modal-box"><button class="modal-close" onclick="document.getElementById('floc-modal').remove()">✕</button><div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:12px;font-family:'DM Sans',sans-serif">Distribución de Tamaño de Flóculo</div>${bar}<div style="font-size:10px;color:#64748b;margin:6px 0 16px;font-family:'DM Sans',sans-serif">Mediana: <strong style="color:#1e293b">125 µm</strong> — tiempo real vía cámara Lir</div><div style="font-size:11px;font-weight:600;color:#1e293b;margin-bottom:8px;font-family:'DM Sans',sans-serif">Tendencia de distribución — últimas 24h</div>${trend}</div>`;
   m.addEventListener('click',e=>{if(e.target===m)m.remove();});
   document.body.appendChild(m);
 }
@@ -668,7 +668,7 @@ function openFIModal(){
   const m=document.createElement('div');
   m.id='fi-modal';
   m.className='modal-overlay';
-  m.innerHTML=`<div class="modal-box"><button class="modal-close" onclick="document.getElementById('fi-modal').remove()">✕</button><div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:12px;font-family:'DM Sans',sans-serif">Filamentous Index <span class="badge b-alert">↑ 62% / 24h</span></div>${chart}<div style="font-size:10px;color:#64748b;margin:6px 0 14px;font-family:'DM Sans',sans-serif">Current: <strong style="color:#dc2626">${lfi}</strong> — Type 0092 / <em>M. parvicella</em></div>${filamentImgPair()}</div>`;
+  m.innerHTML=`<div class="modal-box"><button class="modal-close" onclick="document.getElementById('fi-modal').remove()">✕</button><div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:12px;font-family:'DM Sans',sans-serif">Índice Filamentoso <span class="badge b-alert">↑ 62% / 24h</span></div>${chart}<div style="font-size:10px;color:#64748b;margin:6px 0 14px;font-family:'DM Sans',sans-serif">Actual: <strong style="color:#dc2626">${lfi}</strong> — Tipo 0092 / <em>M. parvicella</em></div>${filamentImgPair()}</div>`;
   m.addEventListener('click',e=>{if(e.target===m)m.remove();});
   document.body.appendChild(m);
 }
@@ -679,7 +679,7 @@ function openSVIModal(){
   const m=document.createElement('div');
   m.id='svi-modal';
   m.className='modal-overlay';
-  m.innerHTML=`<div class="modal-box"><button class="modal-close" onclick="document.getElementById('svi-modal').remove()">✕</button><div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:12px;font-family:'DM Sans',sans-serif">SVI — Live + Forecast <span class="badge b-warn">150+ in 48h</span></div>${chart}<div style="font-size:10px;color:#64748b;margin:6px 0 14px;font-family:'DM Sans',sans-serif">Current: <strong style="color:#1e293b">${lsvi}</strong> mL/g — +1.1/hr</div>${flocImgPair()}</div>`;
+  m.innerHTML=`<div class="modal-box"><button class="modal-close" onclick="document.getElementById('svi-modal').remove()">✕</button><div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:12px;font-family:'DM Sans',sans-serif">IVL — En Vivo + Pronóstico <span class="badge b-warn">150+ en 48h</span></div>${chart}<div style="font-size:10px;color:#64748b;margin:6px 0 14px;font-family:'DM Sans',sans-serif">Actual: <strong style="color:#1e293b">${lsvi}</strong> mL/g — +1,1/h</div>${flocImgPair()}</div>`;
   m.addEventListener('click',e=>{if(e.target===m)m.remove();});
   document.body.appendChild(m);
 }
@@ -687,11 +687,11 @@ function openSVIModal(){
 function openGuide(){
   if(document.getElementById('guide-modal'))return;
   const items=[
-    {icon:'⚡',bg:'#eff6ff',title:'Enable Lir — the main toggle',desc:'Click the "Enable Lir" switch in the top menu bar to activate the AI panel. The SCADA view stays live on the left; Lir\'s biological intelligence appears on the right.'},
-    {icon:'🔴',bg:'#fef2f2',title:'Critical alert — click to expand',desc:'Click the red "SVI Projected to Exceed 150" card to reveal microscopy images of the filamentous bacteria detected by the Lir imager.'},
-    {icon:'🔬',bg:'#f0fdf4',title:'Microscopy images — hover & click',desc:'Hover over any microscopy image to toggle AI annotations on and off. Click an image to open it full-screen.'},
-    {icon:'📈',bg:'#fefce8',title:'Chart cards — click for detail',desc:'Click the Filamentous Index, SVI, or Floc Size Distribution chart cards to open an expanded view with historical data and forecasts.'},
-    {icon:'📋',bg:'#f0fdf4',title:'Operator notification',desc:'In the Recommendations section, click the green "Operators notified" badge to read the full automated alert message sent to site operators.'},
+    {icon:'⚡',bg:'#eff6ff',title:'Activar Lir — el interruptor principal',desc:'Haz clic en el interruptor "Activar Lir" en la barra de menú superior para activar el panel de IA. La vista SCADA se mantiene activa a la izquierda; la inteligencia biológica de Lir aparece a la derecha.'},
+    {icon:'🔴',bg:'#fef2f2',title:'Alerta crítica — clic para expandir',desc:'Haz clic en la tarjeta roja "IVL Proyectado a Superar 150" para revelar imágenes de microscopía de las bacterias filamentosas detectadas por la cámara Lir.'},
+    {icon:'🔬',bg:'#f0fdf4',title:'Imágenes de microscopía — cursor y clic',desc:'Pasa el cursor sobre cualquier imagen de microscopía para activar o desactivar las anotaciones de IA. Haz clic en una imagen para abrirla a pantalla completa.'},
+    {icon:'📈',bg:'#fefce8',title:'Tarjetas de gráficos — clic para detalle',desc:'Haz clic en las tarjetas de Índice Filamentoso, IVL o Distribución de Tamaño de Flóculo para abrir una vista ampliada con datos históricos y pronósticos.'},
+    {icon:'📋',bg:'#f0fdf4',title:'Notificación a operarios',desc:'En la sección de Recomendaciones, haz clic en la insignia verde "Operarios notificados" para leer el mensaje de alerta automático completo enviado a los operarios.'},
   ];
   const m=document.createElement('div');
   m.id='guide-modal';
@@ -701,8 +701,8 @@ function openGuide(){
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
       <div style="width:36px;height:36px;border-radius:50%;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">?</div>
       <div>
-        <div style="font-size:13px;font-weight:700;color:#1e293b;font-family:'DM Sans',sans-serif">How to use this demo</div>
-        <div style="font-size:10px;color:#64748b;font-family:'DM Sans',sans-serif">Explore Lir alongside a live SCADA system</div>
+        <div style="font-size:13px;font-weight:700;color:#1e293b;font-family:'DM Sans',sans-serif">Cómo usar esta demo</div>
+        <div style="font-size:10px;color:#64748b;font-family:'DM Sans',sans-serif">Explora Lir junto a un sistema SCADA en tiempo real</div>
       </div>
     </div>
     ${items.map(it=>`<div class="guide-item">
